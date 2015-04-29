@@ -738,8 +738,12 @@ class Catalog(object):
             workspace = rest_parts[rest_parts.index('workspaces') + 1]
         return Style(self, dom.find("name").text, workspace)
 
-    def get_styles(self):
-        styles_url = url(self.service_url, ["styles.xml"])
+    def get_styles(self, workspace=None):
+        if workspace == None:
+            styles_xml = "styles.xml"
+        else:
+            styles_xml = "workspaces/"+_name(workspace)+"/styles.xml"
+        styles_url = url(self.service_url, [styles_xml])
         description = self.get_xml(styles_url)
         return [Style(self, s.find('name').text) for s in description.findall("style")]
 
